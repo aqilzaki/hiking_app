@@ -1,53 +1,79 @@
-//
-//  MountainDatabase.swift
-//  hiking
-//
-//  Created by muhammad aqil zaki on 10/04/26.
-//
-
-
 import Foundation
 
 struct MountainDatabase {
     static let all: [Mountain] = [
+
         // GRADE I
-        Mountain(name:"Gunung Bromo",province:"Jawa Timur",grade:.I,durationDays:1...1,durationNote:"Tektok",specificItems:["Masker tebal / buff (sangat berdebu, pasir berterbangan)","Kacamata anti debu / goggles","Jaket tebal (angin & dingin subuh)"],reference:"TNBTS",isActive:true),
+        Mountain(id:"bromo", name:"Gunung Bromo", imageName:"gunung_bromo", province:"Jawa Timur", grade:.i, gradeNote:"Padang pasir vulkanik", durationNote:"1 hari", durationDays:1...1, specialItems:["Masker tebal / buff","Kacamata anti debu / goggles","Jaket tebal (angin & dingin subuh)"], reference:"TNBTS", isCurrentlyClosed:true, closureNote:"Aktivitas vulkanik", altitude:2329),
+
         // GRADE II
-        Mountain(name:"Gunung Ambang",province:"Sulawesi Utara",grade:.II,durationDays:1...2,specificItems:["Masker gas / kain (bau belerang cukup menyengat di area kawah)"],reference:"BKSDA Sulawesi Utara",isActive:true),
-        Mountain(name:"Gunung Ijen",province:"Jawa Timur",grade:.II,durationDays:1...1,durationNote:"Tektok",specificItems:["Masker Respirator / Gas (wajib untuk turun ke area blue fire)","Headlamp (pendakian dini hari)"],reference:"BKSDA Jawa Timur",isActive:true),
-        Mountain(name:"Gunung Kaba",province:"Bengkulu",grade:.II,durationDays:1...2,specificItems:["Senter kepala (headlamp) ekstra untuk night trekking ke kawah"],reference:"BKSDA Bengkulu",isActive:true),
-        Mountain(name:"Gunung Merapi",province:"Jawa Tengah",grade:.II,durationDays:2...1,specificItems:["Helm pendakian (wajib pelindung kepala dari batuan lepas di area Pasar Bubrah)","Masker tebal / respirator"],reference:"TNGM",isClosed:true,isActive:true,warningNote:"Saat ini jalur pendakian ditutup permanen"),
-        Mountain(name:"Gunung Bulubaria",province:"Sulawesi Selatan",grade:.II,durationDays:2...1,specificItems:["Sepatu / sandal bersol kasar (jalur tanah licin khas hutan hujan)"],reference:"APGI Sulsel"),
-        Mountain(name:"Gunung Tambora",province:"NTB",grade:.II,durationDays:3...4,specificItems:["Gaiter (jalur berdebu tebal)","Masker (pasir vulkanik di bibir kaldera)"],reference:"Taman Nasional Gunung Tambora",isActive:true),
-        Mountain(name:"Gunung Mambulilling",province:"Sulawesi Barat",grade:.II,durationDays:5...7,durationNote:"Realita",specificItems:["Parang / golok (jalur perintis / tertutup)","Obat anti-malaria","Logistik jangka panjang"],reference:"Catatan Ekspedisi Mapala se-Sulawesi"),
-        Mountain(name:"Gunung Kelimutu",province:"NTT",grade:.II,durationDays:1...1,durationNote:"Tektok",specificItems:["Jaket penahan angin (tektok subuh untuk sunrise, cukup dingin)"],reference:"Taman Nasional Kelimutu"),
-        Mountain(name:"Gunung Papandayan",province:"Jawa Barat",grade:.II,durationDays:2...1,specificItems:["Masker belerang","Trash bag (pengelolaan sampah sangat ketat)"],reference:"TWA Gunung Papandayan / PT AIL",isActive:true),
-        Mountain(name:"Gunung Bulusaraung",province:"Sulawesi Selatan",grade:.II,durationDays:2...1,specificItems:["Sepatu trekking anti-slip (banyak jalur batuan karst yang tajam dan licin)"],reference:"Taman Nasional Bantimurung Bulusaraung"),
-        Mountain(name:"Gunung Batur",province:"Bali",grade:.II,durationDays:1...1,durationNote:"Tektok",specificItems:["Trekking pole","Headlamp (pendakian umumnya dimulai jam 2–3 pagi)"],reference:"BKSDA Bali / Asosiasi Pemandu Batur",isActive:true),
-        Mountain(name:"Gunung Maras",province:"Bangka Belitung",grade:.II,durationDays:1...2,specificItems:["Water bladder / jerigen air (sumber air sangat minim / sulit di atas gunung)"],reference:"BKSDA Sumatera Selatan (Wilayah Babel)"),
+        Mountain(id:"ambang", name:"Gunung Ambang", imageName:"gunung_ambang", province:"Sulawesi Utara", grade:.ii, gradeNote:"Kawah belerang aktif", durationNote:"1-2 hari", durationDays:1...2, specialItems:["Masker gas / kain (bau belerang cukup menyengat di area kawah)"], reference:"BKSDA Sulawesi Utara", isCurrentlyClosed:false, closureNote:"", altitude:1795),
+
+        Mountain(id:"ijen", name:"Gunung Ijen", imageName:"gunung_ijen", province:"Jawa Timur", grade:.ii, gradeNote:"Kawah aktif blue fire", durationNote:"Tektok", durationDays:1...1, specialItems:["Masker respirator","Headlamp"], reference:"BKSDA Jawa Timur", isCurrentlyClosed:false, closureNote:"", altitude:2769),
+
+        Mountain(id:"kaba", name:"Gunung Kaba", imageName:"gunung_kaba", province:"Bengkulu", grade:.ii, gradeNote:"Pendakian pendek ke kawah", durationNote:"1-2 hari", durationDays:1...2, specialItems:["Headlamp"], reference:"BKSDA Bengkulu", isCurrentlyClosed:false, closureNote:"", altitude:1952),
+
+        Mountain(id:"bulubaria", name:"Gunung Bulubaria", imageName:"gunung_bulubaria", province:"Sulawesi Selatan", grade:.ii, gradeNote:"Hutan hujan licin", durationNote:"2 hari", durationDays:2...2, specialItems:["Sepatu anti-slip"], reference:"APGI Sulsel", isCurrentlyClosed:false, closureNote:"", altitude:2730),
+
+        Mountain(id:"mambulilling", name:"Gunung Mambulilling", imageName:"gunung_mambuliling", province:"Sulawesi Barat", grade:.ii, gradeNote:"Berlumut tebal berkabut licin", durationNote:"1-2 hari", durationDays:1...2, specialItems:["Trekking pole"], reference:"Mapala Sulawesi", isCurrentlyClosed:false, closureNote:"", altitude:2873),
+
+        Mountain(id:"kelimutu", name:"Gunung Kelimutu", imageName:"gunung_kelimutu", province:"NTT", grade:.ii, gradeNote:"Danau tiga warna", durationNote:"Tektok", durationDays:1...1, specialItems:["Masker (kawah belerang)"], reference:"TN Kelimutu", isCurrentlyClosed:false, closureNote:"", altitude:1639),
+
+        Mountain(id:"papandayan", name:"Gunung Papandayan", imageName:"gunung_papandayan", province:"Jawa Barat", grade:.ii, gradeNote:"Kawah belerang", durationNote:"1-2 hari", durationDays:1...2, specialItems:["Masker","Trash bag"], reference:"TWA Papandayan", isCurrentlyClosed:false, closureNote:"", altitude:2665),
+
+        Mountain(id:"bulusaraung", name:"Gunung Bulusaraung", imageName:"gunung_bulusaraung", province:"Sulawesi Selatan", grade:.ii, gradeNote:"Karst tajam", durationNote:"2 hari", durationDays:2...2, specialItems:["Sepatu anti-slip"], reference:"TN Bantimurung", isCurrentlyClosed:false, closureNote:"", altitude:1353),
+
+        Mountain(id:"batur", name:"Gunung Batur", imageName:"gunung_batur", province:"Bali", grade:.ii, gradeNote:"Sunrise trek", durationNote:"Tektok", durationDays:1...1, specialItems:["Masker (belerang)","Gaiter (medan pasir)"], reference:"BKSDA Bali", isCurrentlyClosed:false, closureNote:"", altitude:1717),
+
+        Mountain(id:"maras", name:"Gunung Maras", imageName:"gunung_maras", province:"Bangka Belitung", grade:.ii, gradeNote:"Minim air", durationNote:"1-2 hari", durationDays:1...2, specialItems:["Water bladder"], reference:"BKSDA Babel", isCurrentlyClosed:false, closureNote:"", altitude:699),
+
         // GRADE III
-        Mountain(name:"Gunung Ciremai",province:"Jawa Barat",grade:.III,durationDays:2...3,specificItems:["Water bladder ekstra (tidak ada sumber air di jalur Apuy / Palutungan / Linggarjati)"],reference:"TNGC (Taman Nasional Gunung Ciremai)"),
-        Mountain(name:"Gunung Bawakaraeng",province:"Sulawesi Selatan",grade:.III,durationDays:2...3,specificItems:["Jaket thermal tebal (suhu puncaknya terkenal sangat ekstrem di waktu tertentu)"],reference:"Basarnas Sulsel / Catatan Mapala Makassar"),
-        Mountain(name:"Gunung Pangrango",province:"Jawa Barat",grade:.III,durationDays:2...1,specificItems:["Pakaian tebal","Jas hujan (suhu sangat dingin dan lembap di Lembah Mandalawangi)"],reference:"TNGGP (Taman Nasional Gede Pangrango)"),
-        Mountain(name:"Gunung Gede",province:"Jawa Barat",grade:.III,durationDays:2...1,specificItems:["Print out SIMAKSI & surat sehat asli (wajib untuk pengecekan pos masuk)"],reference:"TNGGP (Taman Nasional Gede Pangrango)",isActive:true),
-        Mountain(name:"Gunung Halimun Salak",province:"Jawa Barat",grade:.III,durationDays:2...3,specificItems:["Jaket panjang","Jas hujan (hutan hujan sangat rapat, basah, dan banyak lintah / pacet)"],reference:"TNGHS"),
-        Mountain(name:"Gunung Merbabu",province:"Jawa Tengah",grade:.III,durationDays:2...1,specificItems:["Botol / jerigen air ekstra (sangat minim sumber air, terutama via Selo)"],reference:"TNGMb (Taman Nasional Gunung Merbabu)"),
-        Mountain(name:"Gunung Nokilalaki",province:"Sulawesi Tengah",grade:.III,durationDays:2...1,specificItems:["Pakaian berlengan panjang & gaiter (banyak tumbuhan berduri rotan dan lintah)"],reference:"Taman Nasional Lore Lindu"),
-        Mountain(name:"Gunung Masurai",province:"Jambi",grade:.III,durationDays:3...4,specificItems:["Jas hujan mumpuni","Pakaian quick dry (hutan hujan tropis Sumatera yang pekat dan basah)"],reference:"TNKS"),
-        Mountain(name:"Gunung Tujuh",province:"Kerinci / Jambi",grade:.III,durationDays:1...2,specificItems:["Jaket windbreaker (berada di pinggir danau kaldera tertinggi, angin sangat kencang)"],reference:"TNKS"),
-        Mountain(name:"Gunung Kerinci",province:"Jambi",grade:.III,durationDays:2...3,specificItems:["Gaiter anti lintah","Jas hujan heavy duty","Helm (jalur menuju puncak sering ada badai / batu lepas)"],reference:"TNKS",isActive:true),
-        Mountain(name:"Gunung Singgalang",province:"Sumatera Barat",grade:.III,durationDays:2...1,specificItems:["Jas hujan & baju hangat ekstra (sering hujan, kawasan Telaga Dewi sangat dingin / lembap)"],reference:"BKSDA Sumatera Barat"),
-        Mountain(name:"Gunung Marapi",province:"Sumatera Barat",grade:.III,durationDays:2...1,specificItems:["Masker tebal / respirator (gunung berapi sangat aktif, banyak gas beracun / abu)"],reference:"BKSDA Sumatera Barat",isActive:true,warningNote:"Saat ini sering fluktuatif / ditutup, cek status terbaru sebelum mendaki"),
+        Mountain(id:"ciremai", name:"Gunung Ciremai", imageName:"gunung_ciremai", province:"Jawa Barat", grade:.iii, gradeNote:"Tanpa sumber air", durationNote:"2-3 hari", durationDays:2...3, specialItems:["Water bladder","Trekking pole"], reference:"TNGC", isCurrentlyClosed:false, closureNote:"", altitude:3078),
+
+        Mountain(id:"bawakaraeng", name:"Gunung Bawakaraeng", imageName:"gunung_bawakaraeng", province:"Sulawesi Selatan", grade:.iii, gradeNote:"Suhu ekstrem hutan lumut", durationNote:"2-3 hari", durationDays:2...3, specialItems:["Trekking pole","Sepatu trekking","Pakaian extra (hipotermia)"], reference:"Basarnas", isCurrentlyClosed:false, closureNote:"", altitude:2830),
+
+        Mountain(id:"pangrango", name:"Gunung Pangrango", imageName:"gunung_pangrango", province:"Jawa Barat", grade:.iii, gradeNote:"Lembap dingin macan tutul", durationNote:"2 hari", durationDays:2...2, specialItems:["Sepatu trekking","Trekking pole","Pakaian extra (hipotermia)"], reference:"TNGGP", isCurrentlyClosed:false, closureNote:"", altitude:3026),
+
+        Mountain(id:"gede", name:"Gunung Gede", imageName:"gunung_gede", province:"Jawa Barat", grade:.iii, gradeNote:"Administrasi ketat", durationNote:"2 hari", durationDays:2...2, specialItems:["Trekking pole","Sepatu trekking","Pakaian extra (hipotermia)"], reference:"TNGGP", isCurrentlyClosed:false, closureNote:"", altitude:2958),
+
+        Mountain(id:"halimun_salak", name:"Halimun Salak", imageName:"gunung_halimunsalak", province:"Jawa Barat", grade:.iii, gradeNote:"Hutan hujan tropis rapat berkabut", durationNote:"2-3 hari", durationDays:2...3, specialItems:["Jas hujan","Sepatu anti air"], reference:"TN Gunung Halimun Salak", isCurrentlyClosed:false, closureNote:"", altitude:1929),
+
+        Mountain(id:"merbabu", name:"Gunung Merbabu", imageName:"gunung_merbabu", province:"Jawa Tengah", grade:.iii, gradeNote:"Banyak batuan besar", durationNote:"2 hari", durationDays:2...2, specialItems:["Jaket tebal","Kupluk","Sarung tangan"], reference:"TN Gunung Merbabu", isCurrentlyClosed:false, closureNote:"", altitude:3145),
+
+        Mountain(id:"nokilalaki", name:"Gunung Nokilalaki", imageName:"gunung_nokilalaki", province:"Sulawesi Tengah", grade:.iii, gradeNote:"Vegetasi rapat cuaca tidak menentu", durationNote:"2 hari", durationDays:2...2, specialItems:["Trekking pole","Sepatu trekking"], reference:"TN Lore Lindu", isCurrentlyClosed:false, closureNote:"", altitude:2357),
+
+        Mountain(id:"masurai", name:"Gunung Masurai", imageName:"gunung_masurai", province:"Jambi", grade:.iii, gradeNote:"Jalur akar pohon hutan lumut ekstrem", durationNote:"3-4 hari", durationDays:3...4, specialItems:["Jas hujan","Sepatu anti air"], reference:"BKSDA Jambi", isCurrentlyClosed:false, closureNote:"", altitude:2916),
+
+        Mountain(id:"tujuh", name:"Gunung Tujuh", imageName:"danau_gunung_tujuh_kerinci", province:"Jambi", grade:.iii, gradeNote:"Hutan hujan tropis lebat", durationNote:"1-2 hari", durationDays:1...2, specialItems:["Jas hujan","Sepatu anti air"], reference:"TN Kerinci Seblat", isCurrentlyClosed:false, closureNote:"", altitude:2732),
+
+        Mountain(id:"kerinci", name:"Gunung Kerinci", imageName:"gunung_kerinci", province:"Jambi", grade:.iii, gradeNote:"Gunung tertinggi Sumatera", durationNote:"2-3 hari", durationDays:2...3, specialItems:["Sepatu trekking","Trekking pole","Masker","Gaiter"], reference:"TNKS", isCurrentlyClosed:false, closureNote:"", altitude:3805),
+
+        Mountain(id:"kelam", name:"Gunung Kelam", imageName:"gunung_kelam", province:"Kalimantan Barat", grade:.iii, gradeNote:"Dinding batu curam", durationNote:"1 hari", durationDays:1...1, specialItems:["Sarung tangan / gloves"], reference:"TWA Kelam", isCurrentlyClosed:false, closureNote:"", altitude:1002),
+
         // GRADE IV
-        Mountain(name:"Gunung Argopuro",province:"Jawa Timur",grade:.IV,durationDays:4...5,specificItems:["Tas carrier kapasitas besar & logistik ekstra (trek terpanjang di Pulau Jawa)"],reference:"BKSDA Jawa Timur"),
-        Mountain(name:"Bukit Raya",province:"Kalimantan Tengah",grade:.IV,durationDays:5...7,specificItems:["Sepatu boot karet / kets kuat & gaiter (jalur berlumpur ekstrem dan banyak pacet)"],reference:"Taman Nasional Bukit Baka Bukit Raya"),
-        Mountain(name:"Gandang Dewata",province:"Sulawesi Barat",grade:.IV,durationDays:7...10,specificItems:["Obat anti-malaria","Peralatan survival","Tali webbing (ekspedisi perintis yang sangat rimbun)"],reference:"Taman Nasional Gandang Dewata"),
-        Mountain(name:"Gunung Semeru",province:"Jawa Timur",grade:.IV,durationDays:3...4,specificItems:["Masker tebal","Helm","Kacamata goggles (penahan debu vulkanik / batu lepas di Tanjakan Cinta – Mahameru)"],reference:"TNBTS",isActive:true),
-        Mountain(name:"Gunung Binaiya",province:"Maluku",grade:.IV,durationDays:6...8,specificItems:["Sandal gunung kuat / sepatu amfibi (harus menyeberangi Sungai Yahe dan Kobi yang lebar)"],reference:"Taman Nasional Manusela / APGI Maluku"),
-        Mountain(name:"Gunung Rinjani",province:"NTB",grade:.IV,durationDays:3...4,specificItems:["Trekking pole & gaiter (sangat membantu untuk melibas pasir tebal di jalur summit attack)"],reference:"TNGR (Taman Nasional Gunung Rinjani)",isActive:true),
+        Mountain(id:"argopuro", name:"Gunung Argopuro", imageName:"gunung_argopuro", province:"Jawa Timur", grade:.iv, gradeNote:"Trek terpanjang di Jawa", durationNote:"4-5 hari", durationDays:4...5, specialItems:["GPS","Water bladder","Sepatu agak lembut"], reference:"BKSDA Jawa Timur", isCurrentlyClosed:false, closureNote:"", altitude:3088),
+
+        Mountain(id:"bukit_raya", name:"Bukit Raya", imageName:"gunung_bukit_raya", province:"Kalimantan Tengah", grade:.iv, gradeNote:"Jalur lumpur ekstrem", durationNote:"5-7 hari", durationDays:5...7, specialItems:["Sepatu waterproof","Dry bag","Raincoat"], reference:"TN Bukit Baka Bukit Raya", isCurrentlyClosed:false, closureNote:"", altitude:2278),
+
+        Mountain(id:"gandang_dewata", name:"Gandang Dewata", imageName:"gunung_gandang_dewata", province:"Sulawesi Barat", grade:.iv, gradeNote:"Jalur sempit licin 70 derajat", durationNote:"7-10 hari", durationDays:7...10, specialItems:["Sepatu grid kuat","Trekking pole","Tali"], reference:"TN Gandang Dewata", isCurrentlyClosed:false, closureNote:"", altitude:3037),
+
+        Mountain(id:"binaiya", name:"Gunung Binaiya", imageName:"gunung_binaiya", province:"Maluku", grade:.iv, gradeNote:"Banyak penyeberangan sungai", durationNote:"6-8 hari", durationDays:6...8, specialItems:["Sepatu trekking kuat","Helm"], reference:"TN Manusela", isCurrentlyClosed:false, closureNote:"", altitude:3027),
+
+        Mountain(id:"rinjani", name:"Gunung Rinjani", imageName:"gunung_rinjani", province:"NTB", grade:.iv, gradeNote:"Pasir summit berat", durationNote:"3-4 hari", durationDays:3...4, specialItems:["Masker / buff","Sepatu trekking","Kacamata pelindung"], reference:"TN Rinjani", isCurrentlyClosed:false, closureNote:"", altitude:3726),
+
         // GRADE V
-        Mountain(name:"Gunung Leuser",province:"Aceh",grade:.V,durationDays:10...14,specificItems:["Logistik lengkap","Golok tebas","Sepatu boot karet","Obat-obatan hutan tropis & lintah"],reference:"Taman Nasional Gunung Leuser (TNGL)"),
-        Mountain(name:"Carstensz Pyramid",province:"Papua",grade:.V,durationDays:10...14,specificItems:["Harness","Jumar / ascender","Figure 8 / descender","Carabiner (min. 3 buah)","Helm panjat","Crampon (alat panjat tebing bersalju standar internasional)"],reference:"Operator Ekspedisi Internasional / Taman Nasional Lorentz"),
-        Mountain(name:"Gunung Trikora",province:"Papua",grade:.V,durationDays:7...10,specificItems:["Peralatan panjat tebing Alpine","Jaket bulang (down jacket) tebal (suhu membeku di pegunungan Jayawijaya)"],reference:"Operator Ekspedisi / Catatan Ekspedisi Mapala"),
+        Mountain(id:"leuser", name:"Gunung Leuser", imageName:"gunung_leuser", province:"Aceh", grade:.v, gradeNote:"Ekspedisi hutan panjang", durationNote:"10-14 hari", durationDays:10...14, specialItems:["Sepatu waterproof","Gaiter","Raincoat"], reference:"TNGL", isCurrentlyClosed:false, closureNote:"", altitude:3466),
+
+        Mountain(id:"carstensz", name:"Carstensz Pyramid", imageName:"gunung_carstensz_pyramid", province:"Papua", grade:.v, gradeNote:"Pendakian teknis es & tebing", durationNote:"10-14 hari", durationDays:10...14, specialItems:["Harness + tali panjat","Sepatu climbing","Jaket tebal (suhu di bawah 0°C)"], reference:"TN Lorentz", isCurrentlyClosed:false, closureNote:"", altitude:4884),
+
+        Mountain(id:"trikora", name:"Gunung Trikora", imageName:"gunung_trikora", province:"Papua", grade:.v, gradeNote:"Alpine expedition panjat tebing", durationNote:"7-10 hari", durationDays:7...10, specialItems:["Peralatan panjat","Sepatu high ankle"], reference:"Ekspedisi Mapala", isCurrentlyClosed:false, closureNote:"", altitude:4751),
     ]
+
+    static func filtered(grade: Grade?, query: String) -> [Mountain] {
+        return all.filter { mountain in
+            let matchesGrade = grade == nil || mountain.grade == grade
+            let matchesQuery = query.isEmpty || mountain.name.lowercased().contains(query.lowercased())
+            return matchesGrade && matchesQuery
+        }
+    }
 }

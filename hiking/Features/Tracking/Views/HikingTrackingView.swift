@@ -1,15 +1,12 @@
-//  HikingTrackingView.swift
-//  hiking
-
+// HikingTrackingView.swift
 import SwiftUI
 import DotLottie
 
 struct HikingTrackingView: View {
     let trip: Trip
     @State private var currentDay: Int = 1
-    @State private var isActive: Bool = true
+    @State private var showFinishConfirm = false
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.scenePhase) private var scenePhase
 
     var totalDays: Int { trip.durationDays }
 
@@ -17,42 +14,11 @@ struct HikingTrackingView: View {
         ScrollView {
             VStack(spacing: 0) {
 
-                // MARK: - Scene Ilustrasi
-                ZStack(alignment: .bottom) {
-                    // Background langit
-                    LinearGradient(
-                        colors: [
-                            Color(red: 0.82, green: 0.91, blue: 0.95),
-                            Color(red: 0.93, green: 0.96, blue: 0.98)
-                        ],
-                        startPoint: .top, endPoint: .bottom
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-
-                    // Gunung background
-                    MountainSceneView()
-
-                    // Trail path + pin
-                    TrailPathView(
-                        totalDays: totalDays,
-                        currentDay: currentDay,
-                        gradeColor: gradeColor(trip.grade)
-                    )
-                    .frame(height: 130)
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 80)
-
-                    // Lottie hiker animation
-                    AnimationView()
-                        .frame(width: 160, height: 200)
-                        .offset(y: 10)
-                }
-                .frame(height: 340)
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
+                AnimationView()
+                    .frame(width: 400, height: 300)
+                    .offset(y: 10)
 
                 VStack(spacing: 12) {
-                    // Day progress bar
                     DayProgressView(
                         currentDay: currentDay,
                         totalDays: totalDays,
@@ -61,7 +27,11 @@ struct HikingTrackingView: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 20)
 
-                    // Notifikasi
+                    // MARK: - Debug Controls
+                    #if DEBUG
+                    debugControls
+                    #endif
+
                     NotificationCardView(
                         currentDay: currentDay,
                         totalDays: totalDays,
@@ -69,14 +39,13 @@ struct HikingTrackingView: View {
                     )
                     .padding(.horizontal, 16)
 
-                    // Trip info
                     TripInfoCardView(trip: trip)
                         .padding(.horizontal, 16)
 
-                    // Selesai button
+                    // MARK: - Finish Button (muncul saat hari terakhir)
                     if currentDay >= totalDays {
                         Button {
-                            finishTrip()
+                            showFinishConfirm = true
                         } label: {
                             HStack(spacing: 10) {
                                 Image(systemName: "checkmark.seal.fill")
@@ -97,38 +66,96 @@ struct HikingTrackingView: View {
         }
         .navigationTitle(trip.mountainName)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true) // ← tidak bisa back sembarangan
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    // Bisa minimize tapi Live Activity tetap jalan
-                    dismiss()
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left")
-                        Text("Minimize")
-                    }
+        .onAppear {
+            currentDay = HikingJourneyStorage.shared.loadCurrentDay(tripId: trip.id) ?? 1
+            Task {
+                let granted = await NotificationManager.shared.requestPermission()
+                if granted {
+                    NotificationManager.shared.schedulePackingReminder(trip: trip)
                 }
             }
         }
-        .onAppear {
-            // Restore state dari storage
-            currentDay = HikingJourneyStorage.shared.loadCurrentDay(tripId: trip.id) ?? 1
-            isActive = true
-
-            // Pastikan Live Activity tetap jalan
-            LiveActivityManager.shared.resumeIfNeeded(trip: trip, currentDay: currentDay)
-        }
-        .onChange(of: scenePhase) { phase in
-            if phase == .background {
-                // Simpan state saat app ke background
-                HikingJourneyStorage.shared.saveCurrentDay(tripId: trip.id, day: currentDay)
+        .alert("Kamu udah selesai mendaki belum?", isPresented: $showFinishConfirm) {
+            Button("Belum", role: .cancel) { }
+            Button("Udah, Selesai! 🎉", role: .destructive) {
+                finishTrip()
             }
+        } message: {
+            Text("Pastikan kamu sudah turun dengan selamat dari \(trip.mountainName) sebelum menyelesaikan pendakian.")
         }
     }
 
+    // MARK: - Debug Controls
+    #if DEBUG
+    private var debugControls: some View {
+        VStack(spacing: 8) {
+            Text("🛠 DEBUG")
+                .font(.caption2.bold())
+                .foregroundStyle(.orange)
+
+            HStack(spacing: 12) {
+                // Mundur hari
+                Button {
+                    guard currentDay > 1 else { return }
+                    currentDay -= 1
+                    HikingJourneyStorage.shared.saveJourney(tripId: trip.id, currentDay: currentDay)
+                } label: {
+                    Label("Hari -1", systemImage: "minus.circle")
+                        .font(.caption.bold())
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.orange.opacity(0.15))
+                        .foregroundStyle(.orange)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+
+                // Maju hari
+                Button {
+                    guard currentDay < totalDays else { return }
+                    currentDay += 1
+                    HikingJourneyStorage.shared.saveJourney(tripId: trip.id, currentDay: currentDay)
+                } label: {
+                    Label("Hari +1", systemImage: "plus.circle")
+                        .font(.caption.bold())
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.blue.opacity(0.15))
+                        .foregroundStyle(.blue)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+
+                // Langsung ke hari terakhir
+                Button {
+                    currentDay = totalDays
+                    HikingJourneyStorage.shared.saveJourney(tripId: trip.id, currentDay: currentDay)
+                } label: {
+                    Label("Hari Terakhir", systemImage: "forward.end.fill")
+                        .font(.caption.bold())
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.green.opacity(0.15))
+                        .foregroundStyle(.green)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+            }
+
+            Text("Hari \(currentDay) dari \(totalDays)")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background(Color.orange.opacity(0.06))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.orange.opacity(0.3), lineWidth: 1)
+        )
+        .padding(.horizontal, 16)
+    }
+    #endif
+
+    // MARK: - Finish Trip
     private func finishTrip() {
-        LiveActivityManager.shared.stop()
         HikingJourneyStorage.shared.clearJourney(tripId: trip.id)
         TripStorage.shared.clearActiveTrip()
         NotificationCenter.default.post(name: .tripCompleted, object: trip)
@@ -140,7 +167,9 @@ struct HikingTrackingView: View {
 struct AnimationView: View {
     var body: some View {
         DotLottieAnimation(
-            webURL: "https://lottie.host/embed/d91c2609-12b6-4d46-9870-e32bacf781cf/4SDvBUNBXg.lottie"
-        ).view()
+            fileName: "Traveler",
+            config: AnimationConfig(autoplay: true, loop: true)
+        )
+        .view()
     }
 }

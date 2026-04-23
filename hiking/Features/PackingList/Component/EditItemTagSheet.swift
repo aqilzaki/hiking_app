@@ -1,3 +1,11 @@
+//
+//  EditItemTagSheet.swift
+//  hiking
+//
+//  Created by muhammad aqil zaki on 14/04/26.
+//
+
+
 import SwiftUI
 
 struct EditItemTagSheet: View {
@@ -116,11 +124,11 @@ struct EditItemTagSheet: View {
                     }
 
                     // Preview hierarki
-                    Section {
-                        HierarchyPreviewRow(isEssential: isEssential, ownership: selectedOwnership)
-                    } header: {
-                        Text("Posisi dalam Hierarki")
-                    }
+//                    Section {
+//                        HierarchyPreviewRow(isEssential: isEssential, ownership: selectedOwnership)
+//                    } header: {
+//                        Text("Posisi dalam Hierarki")
+//                    }
                 }
             }
             .navigationTitle("Edit Tag")
@@ -186,67 +194,67 @@ struct EditItemTagSheet: View {
 }
 
 // MARK: - Hierarchy Preview Row
-struct HierarchyPreviewRow: View {
-    let isEssential: Bool
-    let ownership: ItemOwnership
-
-    // Semua level hierarki
-    let levels: [(String, Color, Bool, ItemOwnership)] = [
-        ("⚡ Penting · Sewa",    .red,    true,  .sewa),
-        ("⚡ Penting · Bersama", .orange, true,  .bersama),
-        ("⚡ Penting · Pribadi", .orange, true,  .pribadi),
-        ("🛒 Sewa",              .orange, false, .sewa),
-        ("👥 Bersama",           .green,  false, .bersama),
-        ("👤 Pribadi",           .blue,   false, .pribadi),
-    ]
-
-    var body: some View {
-        VStack(spacing: 6) {
-            ForEach(Array(levels.enumerated()), id: \.offset) { index, level in
-                let (label, color, essential, own) = level
-                let isActive = essential == isEssential && own == ownership
-
-                HStack(spacing: 10) {
-                    // Nomor urut
-                    Text("\(index + 1)")
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
-                        .foregroundStyle(isActive ? color : Color(.systemGray3))
-                        .frame(width: 20)
-
-                    // Label
-                    Text(label)
-                        .font(.system(size: 13, weight: isActive ? .semibold : .regular))
-                        .foregroundStyle(isActive ? color : Color.secondary)
-
-                    Spacer()
-
-                    // Active indicator
-                    if isActive {
-                        Image(systemName: "arrow.left")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(color)
-                        Text("Posisi kamu")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(color)
-                    }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(isActive ? color.opacity(0.08) : Color.clear)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .animation(.spring(response: 0.3), value: isActive)
-
-                if index < levels.count - 1 {
-                    HStack {
-                        Spacer().frame(width: 30)
-                        Image(systemName: "arrow.down")
-                            .font(.system(size: 9))
-                            .foregroundStyle(Color(.systemGray4))
-                        Spacer()
-                    }
-                }
-            }
-        }
-        .padding(.vertical, 4)
-    }
-}
+//struct HierarchyPreviewRow: View {
+//    let isEssential: Bool
+//    let ownership: ItemOwnership
+//
+//    // Semua level hierarki
+//    let levels: [(String, Color, Bool, ItemOwnership)] = [
+//        ("⚡ Penting · Sewa",    .red,    true,  .sewa),
+//        ("⚡ Penting · Bersama", .orange, true,  .bersama),
+//        ("⚡ Penting · Pribadi", .orange, true,  .pribadi),
+//        ("🛒 Sewa",              .orange, false, .sewa),
+//        ("👥 Bersama",           .green,  false, .bersama),
+//        ("👤 Pribadi",           .blue,   false, .pribadi),
+//    ]
+//
+//    var body: some View {
+//        VStack(spacing: 6) {
+//            ForEach(Array(levels.enumerated()), id: \.offset) { index, level in
+//                let (label, color, essential, own) = level
+//                let isActive = essential == isEssential && own == ownership
+//
+//                HStack(spacing: 10) {
+//                    // Nomor urut
+//                    Text("\(index + 1)")
+//                        .font(.system(size: 11, weight: .bold, design: .rounded))
+//                        .foregroundStyle(isActive ? color : Color(.systemGray3))
+//                        .frame(width: 20)
+//
+//                    // Label
+//                    Text(label)
+//                        .font(.system(size: 13, weight: isActive ? .semibold : .regular))
+//                        .foregroundStyle(isActive ? color : Color.secondary)
+//
+//                    Spacer()
+//
+//                    // Active indicator
+//                    if isActive {
+//                        Image(systemName: "arrow.left")
+//                            .font(.system(size: 11, weight: .semibold))
+//                            .foregroundStyle(color)
+//                        Text("Posisi kamu")
+//                            .font(.system(size: 11, weight: .semibold))
+//                            .foregroundStyle(color)
+//                    }
+//                }
+//                .padding(.horizontal, 12)
+//                .padding(.vertical, 8)
+//                .background(isActive ? color.opacity(0.08) : Color.clear)
+//                .clipShape(RoundedRectangle(cornerRadius: 8))
+//                .animation(.spring(response: 0.3), value: isActive)
+//
+//                if index < levels.count - 1 {
+//                    HStack {
+//                        Spacer().frame(width: 30)
+//                        Image(systemName: "arrow.down")
+//                            .font(.system(size: 9))
+//                            .foregroundStyle(Color(.systemGray4))
+//                        Spacer()
+//                    }
+//                }
+//            }
+//        }
+//        .padding(.vertical, 4)
+//    }
+//}

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A71B14BA2F8CE88E0016C371 /* DotLottie in Frameworks */ = {isa = PBXBuildFile; productRef = A71B14B92F8CE88E0016C371 /* DotLottie */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		A7D8CAA62F878DD8007BDDFE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,20 +33,23 @@
 		A7D8CAAF2F878DD8007BDDFE /* hikingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hikingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A71B149F2F8CE1BE0016C371 /* Exceptions for "hiking" folder in "hiking" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A7D8CA952F878DD7007BDDFE /* hiking */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A7D8CA982F878DD7007BDDFE /* hiking */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A71B149F2F8CE1BE0016C371 /* Exceptions for "hiking" folder in "hiking" target */,
+			);
 			path = hiking;
-			sourceTree = "<group>";
-		};
-		A7D8CAA82F878DD8007BDDFE /* hikingTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = hikingTests;
-			sourceTree = "<group>";
-		};
-		A7D8CAB22F878DD8007BDDFE /* hikingUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = hikingUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A71B14BA2F8CE88E0016C371 /* DotLottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +80,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A71B14B82F8CE88E0016C371 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A7D8CA8D2F878DD7007BDDFE = {
 			isa = PBXGroup;
 			children = (
 				A7D8CA982F878DD7007BDDFE /* hiking */,
-				A7D8CAA82F878DD8007BDDFE /* hikingTests */,
-				A7D8CAB22F878DD8007BDDFE /* hikingUITests */,
+				A71B14B82F8CE88E0016C371 /* Frameworks */,
 				A7D8CA972F878DD7007BDDFE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,6 +126,7 @@
 			);
 			name = hiking;
 			packageProductDependencies = (
+				A71B14B92F8CE88E0016C371 /* DotLottie */,
 			);
 			productName = hiking;
 			productReference = A7D8CA962F878DD7007BDDFE /* hiking.app */;
@@ -129,9 +144,6 @@
 			);
 			dependencies = (
 				A7D8CAA72F878DD8007BDDFE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				A7D8CAA82F878DD8007BDDFE /* hikingTests */,
 			);
 			name = hikingTests;
 			packageProductDependencies = (
@@ -152,9 +164,6 @@
 			);
 			dependencies = (
 				A7D8CAB12F878DD8007BDDFE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				A7D8CAB22F878DD8007BDDFE /* hikingUITests */,
 			);
 			name = hikingUITests;
 			packageProductDependencies = (
@@ -195,6 +204,9 @@
 			);
 			mainGroup = A7D8CA8D2F878DD7007BDDFE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A71B14B52F8CE77D0016C371 /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A7D8CA972F878DD7007BDDFE /* Products */;
 			projectDirPath = "";
@@ -398,6 +410,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = hiking/Info.plist;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -442,6 +456,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = hiking/Info.plist;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -615,6 +631,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A71B14B52F8CE77D0016C371 /* XCRemoteSwiftPackageReference "dotlottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LottieFiles/dotlottie-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A71B14B92F8CE88E0016C371 /* DotLottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A71B14B52F8CE77D0016C371 /* XCRemoteSwiftPackageReference "dotlottie-ios" */;
+			productName = DotLottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A7D8CA8E2F878DD7007BDDFE /* Project object */;
 }
