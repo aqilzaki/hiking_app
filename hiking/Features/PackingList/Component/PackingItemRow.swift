@@ -46,7 +46,7 @@ struct PackingItemRow: View {
 
                 Spacer()
 
-                // Ikon ownership kanan
+              
                 Image(systemName: item.ownership.sfSymbol)
                     .font(.system(size: 13))
                     .foregroundStyle(ownershipColor(item.ownership).opacity(0.5))
@@ -54,7 +54,7 @@ struct PackingItemRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        // Swipe kiri → edit tag
+       
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
                 showEditSheet = true

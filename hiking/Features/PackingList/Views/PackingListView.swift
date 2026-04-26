@@ -12,17 +12,7 @@ struct PackingListView: View {
 
     var body: some View {
         List {
-            // Progress
-            ProgressHeaderView(
-                progress: vm.progress,
-                checkedCount: vm.checkedCount,
-                totalCount: vm.totalCount,
-                progressLabel: vm.progressLabel,
-                progressColor: vm.progressColor
-            )
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
+           
 
             // Essential warning
             if !vm.uncheckedEssentials.isEmpty {

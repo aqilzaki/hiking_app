@@ -16,7 +16,8 @@ struct hikingApp: App {
 struct RootView: View {
     @State private var activePackingTrip: Trip? = TripStorage.shared.loadActiveTrip()
     @State private var activeJourneyTrip: Trip? = HikingJourneyStorage.shared.loadActiveJourneyTrip()
-
+    @Environment(\.scenePhase) private var scenePhase
+    
     var body: some View {
         Group {
             if let journey = activeJourneyTrip {
@@ -64,6 +65,7 @@ struct RootView: View {
                     activePackingTrip = nil
                     activeJourneyTrip = nil
                 }
+                
             }
         }
     }

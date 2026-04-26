@@ -18,7 +18,10 @@ final class LiveActivityManager {
         }
 
         // Simpan startDate ke disk supaya bisa dihitung saat resume
-        UserDefaults.standard.set(Date(), forKey: startDateKey(trip))
+        let key = startDateKey(trip)
+        if UserDefaults.standard.object(forKey: key) == nil {
+            UserDefaults.standard.set(Date(), forKey: key)
+        }
 
         let estimatedMinutes = trip.durationDays * 8 * 60
 
@@ -109,8 +112,10 @@ final class LiveActivityManager {
                 dismissalPolicy: .after(Date().addingTimeInterval(10))
             )
             print("🛑 Live Activity stopped")
+            
         }
         activity = nil
+       
     }
 
     // MARK: - Helpers

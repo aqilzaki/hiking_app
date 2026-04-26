@@ -31,9 +31,9 @@ final class NotificationManager {
 
     // MARK: - Schedule (DEBUG - cepat)
     func schedulePackingReminder(trip: Trip) {
-       // cancelAll() // hapus yang lama dulu
+        
 
-        // DEBUG: notif muncul tiap 10 detik
+        // DEBUG: notif
         let intervals: [(seconds: Double, message: String)] = [
             (10,  "Hei! Sudah cek barang bawaan belum? 🎒"),
             (20,  "Jangan lupa sleeping bag ya! 🛌"),

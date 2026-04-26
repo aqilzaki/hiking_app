@@ -1,6 +1,7 @@
 // HikingTrackingView.swift
 import SwiftUI
 import DotLottie
+import Combine
 
 struct HikingTrackingView: View {
     let trip: Trip
@@ -26,11 +27,7 @@ struct HikingTrackingView: View {
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 20)
-
-                    // MARK: - Debug Controls
-                    #if DEBUG
-                    debugControls
-                    #endif
+                    
 
                     NotificationCardView(
                         currentDay: currentDay,
@@ -67,13 +64,19 @@ struct HikingTrackingView: View {
         .navigationTitle(trip.mountainName)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            currentDay = HikingJourneyStorage.shared.loadCurrentDay(tripId: trip.id) ?? 1
+            currentDay = calculateCurrentDay()
             Task {
                 let granted = await NotificationManager.shared.requestPermission()
                 if granted {
                     NotificationManager.shared.schedulePackingReminder(trip: trip)
                 }
             }
+        }
+        .onReceive(
+            Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+        ) { _ in
+            currentDay = calculateCurrentDay()
+            LiveActivityManager.shared.update(trip: trip)
         }
         .alert("Kamu udah selesai mendaki belum?", isPresented: $showFinishConfirm) {
             Button("Belum", role: .cancel) { }
@@ -85,74 +88,6 @@ struct HikingTrackingView: View {
         }
     }
 
-    // MARK: - Debug Controls
-    #if DEBUG
-    private var debugControls: some View {
-        VStack(spacing: 8) {
-            Text("🛠 DEBUG")
-                .font(.caption2.bold())
-                .foregroundStyle(.orange)
-
-            HStack(spacing: 12) {
-                // Mundur hari
-                Button {
-                    guard currentDay > 1 else { return }
-                    currentDay -= 1
-                    HikingJourneyStorage.shared.saveJourney(tripId: trip.id, currentDay: currentDay)
-                } label: {
-                    Label("Hari -1", systemImage: "minus.circle")
-                        .font(.caption.bold())
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.orange.opacity(0.15))
-                        .foregroundStyle(.orange)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-
-                // Maju hari
-                Button {
-                    guard currentDay < totalDays else { return }
-                    currentDay += 1
-                    HikingJourneyStorage.shared.saveJourney(tripId: trip.id, currentDay: currentDay)
-                } label: {
-                    Label("Hari +1", systemImage: "plus.circle")
-                        .font(.caption.bold())
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.15))
-                        .foregroundStyle(.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-
-                // Langsung ke hari terakhir
-                Button {
-                    currentDay = totalDays
-                    HikingJourneyStorage.shared.saveJourney(tripId: trip.id, currentDay: currentDay)
-                } label: {
-                    Label("Hari Terakhir", systemImage: "forward.end.fill")
-                        .font(.caption.bold())
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.green.opacity(0.15))
-                        .foregroundStyle(.green)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-            }
-
-            Text("Hari \(currentDay) dari \(totalDays)")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-        }
-        .padding(12)
-        .background(Color.orange.opacity(0.06))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.orange.opacity(0.3), lineWidth: 1)
-        )
-        .padding(.horizontal, 16)
-    }
-    #endif
 
     // MARK: - Finish Trip
     private func finishTrip() {
@@ -160,6 +95,21 @@ struct HikingTrackingView: View {
         TripStorage.shared.clearActiveTrip()
         NotificationCenter.default.post(name: .tripCompleted, object: trip)
         dismiss()
+    }
+    
+    func calculateCurrentDay() -> Int {
+        let key = "liveActivityStartDate_\(trip.id)"
+        
+        guard let startDate = UserDefaults.standard.object(forKey: key) as? Date else {
+            return 1
+        }
+        
+        let elapsedMinutes = Int(Date().timeIntervalSince(startDate) / 60)
+        
+        let minutesPerDay = 8 * 60
+        let day = (elapsedMinutes / minutesPerDay) + 1
+        
+        return min(day, totalDays)
     }
 }
 
@@ -173,3 +123,4 @@ struct AnimationView: View {
         .view()
     }
 }
+
