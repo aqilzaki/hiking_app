@@ -32,13 +32,20 @@ struct PackingListView: View {
 
             // Departure
             if vm.progress >= 1.0 && !hikingStarted {
+                // Di PackingListView — tap Yuk Berangkat
+                // PackingListView — DepartureButton action
                 DepartureButton(mountainName: vm.trip.mountainName) {
                     hikingStarted = true
+                    TripStorage.shared.save(vm.trip)
                     HikingJourneyStorage.shared.saveJourney(tripId: vm.trip.id, currentDay: 1)
                     LiveActivityManager.shared.start(trip: vm.trip)
-                    navigateToTracking = true
-    
+                    
+                    // Delay kecil supaya UI tidak jump
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        NotificationCenter.default.post(name: .tripBerangkat, object: vm.trip)
+                    }
                 }
+                // Hapus navigateToTracking dan navigationDestination dari PackingListView
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
@@ -65,13 +72,7 @@ struct PackingListView: View {
                 Button { vm.uncheckAllItems() } label: {
                     Label("Hapus Semua Centang", systemImage: "circle")
                 }
-                Divider()
-                Button { vm.showEssentialOnly.toggle() } label: {
-                    Label(
-                        vm.showEssentialOnly ? "Tampilkan Semua" : "Esensial Saja",
-                        systemImage: vm.showEssentialOnly ? "list.bullet" : "star.fill"
-                    )
-                }
+               
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
@@ -148,4 +149,8 @@ struct PackingListView: View {
 
 extension PackingCategory: Identifiable {
     public var id: String { rawValue }
+}
+
+#Preview {
+    PackingListView(trip: .preview)
 }

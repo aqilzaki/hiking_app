@@ -1,36 +1,46 @@
-//
-//  HikingTabContainerView.swift
-//  hiking
-//
-//  Created by muhammad aqil zaki on 15/04/26.
-//
-
+// HikingTabContainerView.swift
 import SwiftUI
-
 
 struct HikingTabContainerView: View {
     let trip: Trip
+    @Environment(\.dismiss) private var dismiss
+    @State private var selectedTab = 0
 
     var body: some View {
-        TabView {
-
-            // TAB 1 -
-            HikingTrackingView(trip: trip)
-                .tabItem {
-                    Image(systemName: "bell.fill")
-                    Text("Tracking")
+        NavigationStack {
+            VStack(spacing: 0) {
+                Picker("", selection: $selectedTab) {
+                    Text("Tracking").tag(0)
+                    Text("Checklist").tag(1)
                 }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
 
-            // TAB 2 - Checklist
-            HikingChecklistView(trip: trip)
-                .tabItem {
-                    Image(systemName: "checklist")
-                    Text("Checklist")
+                Divider()
+
+                // Content
+                if selectedTab == 0 {
+                    HikingTrackingView(trip: trip)
+                } else {
+                    HikingChecklistView(trip: trip)
                 }
-            
-        }
-        
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                         NotificationCenter.default.post(name: .dismissToHome, object: trip)
+                  
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                        }
+                        .foregroundStyle(.primary)
+                    }
+                }
             }
         }
-    
-    
+    }
+}

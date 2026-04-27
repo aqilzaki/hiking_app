@@ -141,7 +141,7 @@ final class LiveActivityManager {
         }
     }
 
-    /// staleDate 1 jam dari sekarang — supaya iOS tidak sembunyikan Live Activity
+    /// staleDate 1 jam dari sekarang 
     private func staleDate() -> Date {
         Date().addingTimeInterval(60 * 60)
     }

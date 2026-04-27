@@ -61,8 +61,7 @@ struct HikingTrackingView: View {
                 .padding(.bottom, 40)
             }
         }
-        .navigationTitle(trip.mountainName)
-        .navigationBarTitleDisplayMode(.inline)
+
         .onAppear {
             currentDay = calculateCurrentDay()
             Task {
@@ -124,3 +123,8 @@ struct AnimationView: View {
     }
 }
 
+
+
+#Preview{
+    HikingTrackingView(trip: .preview)
+}
