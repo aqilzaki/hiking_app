@@ -13,18 +13,15 @@ struct hikingApp: App {
 // MARK: - Root View
 struct RootView: View {
     @State private var activeJourneyTrip: Trip? = nil
-    @State private var path = NavigationPath()  // ← tambah ini
+    @State private var path = NavigationPath()  
 
     var body: some View {
-        NavigationStack(path: $path) {  // ← pass path
+        NavigationStack(path: $path) {
             HomeView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .tripBerangkat)) { notif in
-            if let trip = notif.object as? Trip {
-                // Reset stack ke root dulu — PackingListView hilang
-                path = NavigationPath()  // ← clear semua history navigation
-                
-                // Tunggu stack reset selesai baru buka fullScreenCover
+            if let trip = notif.object as? Trip {          
+                path = NavigationPath()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     withAnimation(.spring(response: 0.4)) {
                         activeJourneyTrip = trip
@@ -40,7 +37,7 @@ struct RootView: View {
         .onReceive(NotificationCenter.default.publisher(for: .dismissToHome)) { _ in
             withAnimation(.spring(response: 0.4)) {
                 activeJourneyTrip = nil
-                path = NavigationPath()  // ← reset stack juga saat dismiss
+                path = NavigationPath()  
             }
         }
         .fullScreenCover(item: $activeJourneyTrip) { journey in

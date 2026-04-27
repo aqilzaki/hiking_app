@@ -1,3 +1,11 @@
+//
+//  EssentialWarningSection.swift
+//  hiking
+//
+//  Created by muhammad aqil zaki on 27/04/26.
+//
+
+
 // EssentialWarningSection.swift
 import SwiftUI
 

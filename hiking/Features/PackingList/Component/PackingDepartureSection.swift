@@ -1,3 +1,11 @@
+//
+//  PackingDepartureSection.swift
+//  hiking
+//
+//  Created by muhammad aqil zaki on 27/04/26.
+//
+
+
 // PackingDepartureSection.swift
 import SwiftUI
 

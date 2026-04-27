@@ -4,17 +4,16 @@ import SwiftUI
 struct HomeView: View {
     @State private var selectedMountain: Mountain? = nil
     @State private var showStarter = false
-    @State private var navigateToTracking = false
     @State private var searchText = ""
-    // Ambil active trip dari storage, bukan dummy
     @State private var activeTrip: Trip? = TripStorage.shared.loadActiveTrip()
 
     let mountains = MountainDatabase.all
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
-    
+
     var featuredMountains: [Mountain] {
         Array(mountains.filter { $0.grade == .ii || $0.grade == .i }.prefix(3))
     }
+
     var filteredMountains: [Mountain] {
         if searchText.isEmpty {
             return mountains
@@ -27,36 +26,56 @@ struct HomeView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+
+                // MARK: - Carousel
+                if let trip = activeTrip, searchText.isEmpty {
+                    // ← carousel hilang saat search aktif
+                    Button {
+                        NotificationCenter.default.post( name: .tripBerangkat, object: trip)
+                    } label: {
+                        FeaturedCarousel(
+                            activeTrip: (
+                                name: trip.mountainName,
+                                province: trip.mountainProvince,
+                                grade: trip.grade,
+                                day: HikingJourneyStorage.shared.loadCurrentDay(tripId: trip.id) ?? 1,
+                                totalDays: trip.durationDays
+                            ),
+                            mountains: featuredMountains
+                        )
+                        .frame(height: 240)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                // MARK: - Jelajahi Gunung
                 VStack(alignment: .leading, spacing: 24) {
 
-                    // MARK: - Carousel (hanya muncul kalau ada active trip)
-                    if let trip = activeTrip {
-                        Button {
-                            navigateToTracking = true
-                        } label: {
-                            FeaturedCarousel(
-                                activeTrip: (
-                                    name: trip.mountainName,
-                                    province: trip.mountainProvince,
-                                    grade: trip.grade,
-                                    day: HikingJourneyStorage.shared.loadCurrentDay(tripId: trip.id) ?? 1,
-                                    totalDays: trip.durationDays
-                                ),
-                                mountains: featuredMountains
-                            )
-                            .frame(height: 240)
-                        }
-                        .buttonStyle(.plain)
-                    }
-
-                    // MARK: - Jelajahi Gunung
-                    VStack(alignment: .leading, spacing: 24) {
+                    // Kalau search kosong tampilkan header
+                    if searchText.isEmpty {
                         Text("Jelajahi Gunung")
                             .font(.title3.bold())
                             .padding(.horizontal, 16)
+                    }
 
+                    if filteredMountains.isEmpty {
+                        // Empty state
+                        VStack(spacing: 12) {
+                            Image(systemName: "magnifyingglass")
+                                .font(.system(size: 40))
+                                .foregroundStyle(.secondary)
+                            Text("Gunung \"\(searchText)\" tidak ditemukan")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
+
+                    } else if searchText.isEmpty {
+                        // Grid per grade
                         ForEach(Grade.allCases, id: \.rawValue) { grade in
                             let gradeMountains = filteredMountains.filter { $0.grade == grade }
                             if !gradeMountains.isEmpty {
@@ -88,33 +107,37 @@ struct HomeView: View {
                                 }
                             }
                         }
+
+                    } else {
+                        // Hasil search — flat grid tanpa grouping grade
+                        LazyVGrid(columns: columns, spacing: 12) {
+                            ForEach(filteredMountains) { mountain in
+                                MountainGridCard(mountain: mountain) {
+                                    selectedMountain = mountain
+                                    showStarter = true
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
                     }
                 }
-                .padding(.vertical, 8)
             }
-            .navigationTitle("Halo, Pendaki! 👋")
-            .navigationBarTitleDisplayMode(.large)
-            .navigationDestination(isPresented: $showStarter) {
-                if let m = selectedMountain {
-                    StarterView(mountain: m)
-                }
-            }
-            .navigationDestination(isPresented: $navigateToTracking) {
-                if let trip = activeTrip {
-                    HikingTabContainerView(trip: trip)
-                }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .tripStarted)) { notification in
-                // Trip baru dibuat → update active trip → carousel muncul
-                activeTrip = notification.object as? Trip
-
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .tripCompleted)) { _ in
-                // Trip selesai → hapus active trip → carousel hilang
-                activeTrip = nil
+            .padding(.vertical, 8)
+        }
+        .navigationTitle("Halo, Pendaki! 👋")
+        .navigationBarTitleDisplayMode(.large)
+        .searchable(text: $searchText, prompt: "Cari gunung atau provinsi...")  // ← di sini
+        .navigationDestination(isPresented: $showStarter) {
+            if let m = selectedMountain {
+                StarterView(mountain: m)
             }
         }
-        .searchable(text: $searchText, prompt: "Cari gunung...")
+        .onReceive(NotificationCenter.default.publisher(for: .tripStarted)) { notif in
+            activeTrip = notif.object as? Trip
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .tripCompleted)) { _ in
+            activeTrip = nil
+        }
     }
 }
 
@@ -126,5 +149,7 @@ extension Array {
 }
 
 #Preview {
-    HomeView()
+    NavigationStack {
+        HomeView()
+    }
 }

@@ -13,9 +13,8 @@ struct StarterView: View {
                 DurasiSection(vm: vm)
                 JumlahOrangRow(jumlahOrang: $vm.jumlahOrang)
                 StarterCTAButton(canProceed: vm.canProceed) {
-                    // Cek dulu ada active trip atau tidak
                     if TripStorage.shared.loadActiveTrip() != nil {
-                        showActiveAlert = true  // ← tampilkan pop up
+                        showActiveAlert = true
                     } else {
                         vm.createAndStartTrip()
                     }

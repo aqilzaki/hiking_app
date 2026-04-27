@@ -1,149 +1,55 @@
+// PackingListView.swift
 import SwiftUI
 
 struct PackingListView: View {
     @StateObject private var vm: PackingListViewModel
     @State private var addingTo: PackingCategory? = nil
-    @State private var hikingStarted              = false
-    @State private var navigateToTracking         = false
-    
+    @State private var hikingStarted = false
+
     init(trip: Trip) {
         _vm = StateObject(wrappedValue: PackingListViewModel(trip: trip))
     }
 
     var body: some View {
         List {
-           
-
-            // Essential warning
             if !vm.uncheckedEssentials.isEmpty {
-                essentialWarning
+                EssentialWarningSection(uncheckedEssentials: vm.uncheckedEssentials)
             }
 
-            // Filter
-            FilterRow(vm: vm)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
+            PackingFilterRow(vm: vm)
 
-            // Categories
             ForEach(vm.displayedCategories, id: \.self) { category in
-                categorySection(category)
+                PackingCategorySection(
+                    category: category,
+                    items: vm.filteredItems(for: category),
+                    onToggle: { vm.toggle(itemId: $0) },
+                    onOwnershipChange: { id, ownership in vm.updateOwnership(itemId: id, ownership: ownership) },
+                    onEssentialChange: { id, isEssential in vm.updateEssential(itemId: id, isEssential: isEssential) },
+                    onDelete: { vm.deleteItems(at: $0, in: category) },
+                    onAdd: { addingTo = category },
+                    onCheckAll: { vm.checkAll(in: category) },
+                    onUncheckAll: { vm.uncheckAll(in: category) }
+                )
             }
 
-            // Departure
             if vm.progress >= 1.0 && !hikingStarted {
-                // Di PackingListView — tap Yuk Berangkat
-                // PackingListView — DepartureButton action
-                DepartureButton(mountainName: vm.trip.mountainName) {
+                PackingDepartureSection(mountainName: vm.trip.mountainName) {
                     hikingStarted = true
                     TripStorage.shared.save(vm.trip)
+                    TripStorage.shared.setActiveTrip(vm.trip)
                     HikingJourneyStorage.shared.saveJourney(tripId: vm.trip.id, currentDay: 1)
                     LiveActivityManager.shared.start(trip: vm.trip)
-                    
-                    // Delay kecil supaya UI tidak jump
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         NotificationCenter.default.post(name: .tripBerangkat, object: vm.trip)
                     }
                 }
-                // Hapus navigateToTracking dan navigationDestination dari PackingListView
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
             }
         }
         .listStyle(.insetGrouped)
         .navigationTitle(vm.trip.mountainName)
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(isPresented: $navigateToTracking) {
-            HikingTabContainerView(trip: vm.trip)
-        }
-        .toolbar { toolbarContent }
+        .toolbar { PackingToolbar(vm: vm) }
         .sheet(item: $addingTo) { AddItemSheet(category: $0, vm: vm) }
-    }
-
-    // MARK: - Toolbar
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Menu {
-                Button { vm.checkAllItems() } label: {
-                    Label("Centang Semua", systemImage: "checkmark.circle.fill")
-                }
-                Button { vm.uncheckAllItems() } label: {
-                    Label("Hapus Semua Centang", systemImage: "circle")
-                }
-               
-            } label: {
-                Image(systemName: "ellipsis.circle")
-            }
-        }
-    }
-
-    // MARK: - Essential Warning
-    private var essentialWarning: some View {
-        Section {
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.orange)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("\(vm.uncheckedEssentials.count) item penting belum di-cek")
-                        .font(.subheadline.weight(.semibold))
-                    Text(vm.uncheckedEssentials.prefix(2).map { $0.name }.joined(separator: ", ")
-                         + (vm.uncheckedEssentials.count > 2 ? "..." : ""))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .padding(.vertical, 2)
-        }
-        .listRowBackground(Color.orange.opacity(0.08))
-    }
-
-    // MARK: - Category Section
-    @ViewBuilder
-    private func categorySection(_ category: PackingCategory) -> some View {
-        let items = vm.filteredItems(for: category)
-        if !items.isEmpty {
-            Section {
-                ForEach(items) { item in
-                    PackingItemRow(
-                        item: item,
-                        onToggle: { vm.toggle(itemId: item.id) },
-                        onOwnershipChange: { vm.updateOwnership(itemId: item.id, ownership: $0) },
-                        onEssentialChange: { vm.updateEssential(itemId: item.id, isEssential: $0) }
-                    )
-                }
-                .onDelete { vm.deleteItems(at: $0, in: category) }
-
-                Button { addingTo = category } label: {
-                    Label("Tambah item", systemImage: "plus.circle")
-                        .font(.subheadline)
-                        .foregroundStyle(.primary)
-                }
-            } header: {
-                HStack {
-                    Label(category.rawValue, systemImage: category.sfSymbol)
-                    Spacer()
-                    let checked    = items.filter { $0.isChecked }.count
-                    let allChecked = checked == items.count
-
-                    Button {
-                        allChecked ? vm.uncheckAll(in: category) : vm.checkAll(in: category)
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: allChecked ? "checkmark.circle.fill" : "circle")
-                                .font(.system(size: 13))
-                                .foregroundStyle(allChecked ? Color.green : Color.secondary)
-                            Text("\(checked)/\(items.count)")
-                                .font(.caption)
-                                .foregroundStyle(allChecked ? Color.green : Color.secondary)
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .animation(.spring(response: 0.2), value: allChecked)
-                }
-            }
-        }
     }
 }
 
@@ -152,5 +58,7 @@ extension PackingCategory: Identifiable {
 }
 
 #Preview {
-    PackingListView(trip: .preview)
+    NavigationStack {
+        PackingListView(trip: .preview)
+    }
 }

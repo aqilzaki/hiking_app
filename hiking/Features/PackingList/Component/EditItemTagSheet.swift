@@ -122,13 +122,6 @@ struct EditItemTagSheet: View {
                     } header: {
                         Text("Prioritas")
                     }
-
-                    // Preview hierarki
-//                    Section {
-//                        HierarchyPreviewRow(isEssential: isEssential, ownership: selectedOwnership)
-//                    } header: {
-//                        Text("Posisi dalam Hierarki")
-//                    }
                 }
             }
             .navigationTitle("Edit Tag")

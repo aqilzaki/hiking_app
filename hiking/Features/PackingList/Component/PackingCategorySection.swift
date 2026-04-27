@@ -1,3 +1,11 @@
+//
+//  PackingCategorySection.swift
+//  hiking
+//
+//  Created by muhammad aqil zaki on 27/04/26.
+//
+
+
 // PackingCategorySection.swift
 import SwiftUI
 

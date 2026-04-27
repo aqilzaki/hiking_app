@@ -23,7 +23,7 @@ struct PackingItemRow: View {
                         Text(item.name)
                             .font(.body)
                             .foregroundStyle(item.isChecked ? Color.secondary : Color.primary)
-                            .strikethrough(item.isChecked)
+                            // ← hapus strikethrough, ganti opacity di bawah
 
                         if item.isEssential && !item.isChecked {
                             badgeView("PENTING", color: .orange)
@@ -46,15 +46,15 @@ struct PackingItemRow: View {
 
                 Spacer()
 
-              
                 Image(systemName: item.ownership.sfSymbol)
                     .font(.system(size: 13))
                     .foregroundStyle(ownershipColor(item.ownership).opacity(0.5))
             }
             .contentShape(Rectangle())
+            .opacity(item.isChecked ? 0.35 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: item.isChecked)
         }
         .buttonStyle(.plain)
-       
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
                 showEditSheet = true
