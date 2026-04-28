@@ -147,4 +147,6 @@ final class PackingListViewModel: ObservableObject {
         trip.items.remove(atOffsets: IndexSet(globalIndices))
         storage.save(trip)
     }
+    
+    
 }

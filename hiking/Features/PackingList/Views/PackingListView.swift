@@ -40,7 +40,7 @@ struct PackingListView: View {
                     HikingJourneyStorage.shared.saveJourney(tripId: vm.trip.id, currentDay: 1)
                     LiveActivityManager.shared.start(trip: vm.trip)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        NotificationCenter.default.post(name: .tripBerangkat, object: vm.trip)
+                        NotificationCenter.default.post(name: .tripStarted, object: vm.trip)
                     }
                 }
             }

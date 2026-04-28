@@ -17,7 +17,7 @@ final class LiveActivityManager {
             return
         }
 
-        // Simpan startDate ke disk supaya bisa dihitung saat resume
+        // Simpan startDate ke disk
         let key = startDateKey(trip)
         if UserDefaults.standard.object(forKey: key) == nil {
             UserDefaults.standard.set(Date(), forKey: key)
@@ -119,7 +119,6 @@ final class LiveActivityManager {
     }
 
     // MARK: - Helpers
-
     private func startDateKey(_ trip: Trip) -> String {
         "liveActivityStartDate_\(trip.id)"
     }

@@ -55,6 +55,16 @@ struct PackingItemRow: View {
             .animation(.easeInOut(duration: 0.2), value: item.isChecked)
         }
         .buttonStyle(.plain)
+        // Ganti swipeActions
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            if !item.isEssential {
+                Button(role: .destructive) {
+                    // delete handled by onDelete
+                } label: {
+                    Label("Hapus", systemImage: "trash")
+                }
+            }
+        }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
                 showEditSheet = true

@@ -10,7 +10,6 @@ struct HikingChecklistView: View {
 
     var body: some View {
         List {
-            // Progress ringkas
             Section {
                 HStack {
                     Text("Terkumpul")

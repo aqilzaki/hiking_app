@@ -15,13 +15,12 @@ final class JourneyChecklistViewModel: ObservableObject {
     @Published private var items: [PackingItem]
 
     init(trip: Trip) {
-        // Copy item dari trip tapi semua unchecked — mulai dari nol
         self.items = trip.items
-            .filter { $0.isEssential }  // hanya esensial
+            .filter { $0.isEssential }
             .map { item in
                 var copy = item
-                copy.isChecked = false  // ← reset semua ke unchecked
-                copy.id = UUID()        // ← id baru supaya tidak konflik dengan packing list
+                copy.isChecked = false
+                copy.id = UUID()
                 return copy
             }
     }

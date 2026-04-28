@@ -31,9 +31,8 @@ struct HomeView: View {
 
                 // MARK: - Carousel
                 if let trip = activeTrip, searchText.isEmpty {
-                    // ← carousel hilang saat search aktif
                     Button {
-                        NotificationCenter.default.post( name: .tripBerangkat, object: trip)
+                        NotificationCenter.default.post( name: .tripStarted, object: trip)
                     } label: {
                         FeaturedCarousel(
                             activeTrip: (
@@ -126,7 +125,7 @@ struct HomeView: View {
         }
         .navigationTitle("Halo, Pendaki! 👋")
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "Cari gunung atau provinsi...")  // ← di sini
+        .searchable(text: $searchText, prompt: "Cari gunung atau provinsi...")
         .navigationDestination(isPresented: $showStarter) {
             if let m = selectedMountain {
                 StarterView(mountain: m)

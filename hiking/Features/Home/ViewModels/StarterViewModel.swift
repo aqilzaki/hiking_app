@@ -82,7 +82,6 @@ final class StarterViewModel: ObservableObject {
 
         TripStorage.shared.save(trip)
         TripStorage.shared.setActiveTrip(trip)
-        NotificationCenter.default.post(name: .tripStarted, object: trip)
         createdTrip = trip
         tripCreated = true
     }

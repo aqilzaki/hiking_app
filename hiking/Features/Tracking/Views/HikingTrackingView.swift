@@ -39,7 +39,7 @@ struct HikingTrackingView: View {
                     TripInfoCardView(trip: trip)
                         .padding(.horizontal, 16)
 
-                    // MARK: - Finish Button (muncul saat hari terakhir)
+                    // MARK: - Finish Button
                     if currentDay >= totalDays {
                         Button {
                             showFinishConfirm = true
@@ -93,7 +93,6 @@ struct HikingTrackingView: View {
         HikingJourneyStorage.shared.clearJourney(tripId: trip.id)
         TripStorage.shared.clearActiveTrip()
         NotificationCenter.default.post(name: .tripCompleted, object: trip)
-        dismiss()
     }
     
     func calculateCurrentDay() -> Int {
